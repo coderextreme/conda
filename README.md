@@ -13,6 +13,9 @@ or from here with more options:
 
 https://mybinder.org/v2/gh/coderextreme/conda/master/?urlpath=lab/tree/sphere.ipynb
 
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/coderextreme/conda/master?filepath=sphere.ipynb)
+
+
 ## Notes
 The `environment.yml` file should list all Python libraries on which your notebooks
 depend, specified as though they were created using the following `conda` commands:
