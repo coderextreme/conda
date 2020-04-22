@@ -5822,7 +5822,7 @@ class ExternProtoDeclare(_X3DStatement):
         if self.name:
             result += " name='" + self.name + "'"
         if self.url != list():
-            result += " url='" + self.url + "'"
+            result += " url='" + str(self.url) + "'"
         if not self.hasChild():
             result += '/>' + '\n'
         else:
@@ -5958,7 +5958,7 @@ class field(_X3DStatement):
         if self.type:
             result += " type='" + self.type + "'"
         if self.value:
-            result += " value='" + self.value + "'"
+            result += " value='" + str(self.value) + "'"
         if not self.hasChild():
             result += '/>' + '\n'
         else:
@@ -6034,7 +6034,7 @@ class fieldValue(_X3DStatement):
         if self.name:
             result += " name='" + self.name + "'"
         if self.value:
-            result += " value='" + self.value + "'"
+            result += " value='" + str(self.value) + "'"
         if not self.hasChild():
             result += '/>' + '\n'
         else:
@@ -6483,14 +6483,10 @@ class ProtoDeclare(_X3DStatement):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.ProtoBody: # walk each child node, if any
-                for each in self.ProtoBody:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.ProtoInterface: # walk each child node, if any
-                for each in self.ProtoInterface:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.ProtoBody: # output this SFNode
+                result += self.ProtoBody.toXML(indentLevel=indentLevel+1)
+            if self.ProtoInterface: # output this SFNode
+                result += self.ProtoInterface.toXML(indentLevel=indentLevel+1)
             result += indent + '</ProtoDeclare>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -6872,9 +6868,9 @@ class X3D(_X3DNode):
         elif self.version == '4.1':
             result += self.X3D_XML_SCHEMA_ATTRIBUTES_4_1
         result += '>' + '\n' # finish open tag
-        if self.head.hasChild():
+        if self.head and self.head.hasChild():
             result += str(self.head.toXML(indentLevel=indentLevel+1))
-        if self.Scene.hasChild():
+        if self.Scene and self.Scene.hasChild():
             result += str(self.Scene.toXML(indentLevel=indentLevel+1))
         result += '</X3D>' + '\n'
 #       print('XML serialization complete.', flush=True)
@@ -7039,23 +7035,19 @@ class Anchor(_X3DGroupingNode, _X3DUrlObject):
         if self.displayBBox != False:
             result += " displayBBox='" + str(self.displayBBox) + "'"
         if self.parameter != list():
-            result += " parameter='" + self.parameter + "'"
+            result += " parameter='" + str(self.parameter) + "'"
         if self.url != list():
-            result += " url='" + self.url + "'"
+            result += " url='" + str(self.url) + "'"
         if self.visible != True:
             result += " visible='" + str(self.visible) + "'"
         if not self.hasChild():
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
             if self.children: # walk each child node, if any
                 for each in self.children:
@@ -7216,38 +7208,22 @@ class Appearance(_X3DAppearanceNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.fillProperties: # walk each child node, if any
-                for each in self.fillProperties:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.lineProperties: # walk each child node, if any
-                for each in self.lineProperties:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.material: # walk each child node, if any
-                for each in self.material:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.pointProperties: # walk each child node, if any
-                for each in self.pointProperties:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.texture: # walk each child node, if any
-                for each in self.texture:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.textureTransform: # walk each child node, if any
-                for each in self.textureTransform:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.fillProperties: # output this SFNode
+                result += self.fillProperties.toXML(indentLevel=indentLevel+1)
+            if self.lineProperties: # output this SFNode
+                result += self.lineProperties.toXML(indentLevel=indentLevel+1)
+            if self.material: # output this SFNode
+                result += self.material.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
+            if self.pointProperties: # output this SFNode
+                result += self.pointProperties.toXML(indentLevel=indentLevel+1)
+            if self.texture: # output this SFNode
+                result += self.texture.toXML(indentLevel=indentLevel+1)
+            if self.textureTransform: # output this SFNode
+                result += self.textureTransform.toXML(indentLevel=indentLevel+1)
             ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
             if self.shaders: # walk each child node, if any
                 for each in self.shaders:
@@ -7350,14 +7326,10 @@ class Arc2D(_X3DGeometryNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</Arc2D>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -7486,14 +7458,10 @@ class ArcClose2D(_X3DGeometryNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</ArcClose2D>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -7658,19 +7626,15 @@ class AudioClip(_X3DSoundSourceNode, _X3DUrlObject):
         if self.stopTime != 0:
             result += " stopTime='" + str(self.stopTime) + "'"
         if self.url != list():
-            result += " url='" + self.url + "'"
+            result += " url='" + str(self.url) + "'"
         if not self.hasChild():
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</AudioClip>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -7864,41 +7828,37 @@ class Background(_X3DBackgroundNode):
         if self.USE:
             result += " USE='" + self.USE + "'"
         if self.backUrl != list():
-            result += " backUrl='" + self.backUrl + "'"
+            result += " backUrl='" + str(self.backUrl) + "'"
         if self.bottomUrl != list():
-            result += " bottomUrl='" + self.bottomUrl + "'"
+            result += " bottomUrl='" + str(self.bottomUrl) + "'"
         if self.class_:
             result += " class_='" + self.class_ + "'"
         if self.frontUrl != list():
-            result += " frontUrl='" + self.frontUrl + "'"
+            result += " frontUrl='" + str(self.frontUrl) + "'"
         if self.groundAngle != list():
             result += " groundAngle='" + str(self.groundAngle) + "'"
         if self.groundColor != list():
             result += " groundColor='" + str(self.groundColor) + "'"
         if self.leftUrl != list():
-            result += " leftUrl='" + self.leftUrl + "'"
+            result += " leftUrl='" + str(self.leftUrl) + "'"
         if self.rightUrl != list():
-            result += " rightUrl='" + self.rightUrl + "'"
+            result += " rightUrl='" + str(self.rightUrl) + "'"
         if self.skyAngle != list():
             result += " skyAngle='" + str(self.skyAngle) + "'"
         if self.skyColor != [(0, 0, 0)]:
             result += " skyColor='" + str(self.skyColor) + "'"
         if self.topUrl != list():
-            result += " topUrl='" + self.topUrl + "'"
+            result += " topUrl='" + str(self.topUrl) + "'"
         if self.transparency != 0:
             result += " transparency='" + str(self.transparency) + "'"
         if not self.hasChild():
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</Background>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -8002,27 +7962,19 @@ class BallJoint(_X3DRigidJointNode):
         if self.class_:
             result += " class_='" + self.class_ + "'"
         if self.forceOutput != ["NONE"]:
-            result += " forceOutput='" + self.forceOutput + "'"
+            result += " forceOutput='" + str(self.forceOutput) + "'"
         if not self.hasChild():
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.body1: # walk each child node, if any
-                for each in self.body1:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.body2: # walk each child node, if any
-                for each in self.body2:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.body1: # output this SFNode
+                result += self.body1.toXML(indentLevel=indentLevel+1)
+            if self.body2: # output this SFNode
+                result += self.body2.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</BallJoint>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -8158,14 +8110,10 @@ class Billboard(_X3DGroupingNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
             if self.children: # walk each child node, if any
                 for each in self.children:
@@ -8357,30 +8305,18 @@ class BlendedVolumeStyle(_X3DComposableVolumeRenderStyleNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.renderStyle: # walk each child node, if any
-                for each in self.renderStyle:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.voxels: # walk each child node, if any
-                for each in self.voxels:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.weightTransferFunction1: # walk each child node, if any
-                for each in self.weightTransferFunction1:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.weightTransferFunction2: # walk each child node, if any
-                for each in self.weightTransferFunction2:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
+            if self.renderStyle: # output this SFNode
+                result += self.renderStyle.toXML(indentLevel=indentLevel+1)
+            if self.voxels: # output this SFNode
+                result += self.voxels.toXML(indentLevel=indentLevel+1)
+            if self.weightTransferFunction1: # output this SFNode
+                result += self.weightTransferFunction1.toXML(indentLevel=indentLevel+1)
+            if self.weightTransferFunction2: # output this SFNode
+                result += self.weightTransferFunction2.toXML(indentLevel=indentLevel+1)
             result += indent + '</BlendedVolumeStyle>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -8429,14 +8365,10 @@ class BooleanFilter(_X3DChildNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</BooleanFilter>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -8515,14 +8447,10 @@ class BooleanSequencer(_X3DSequencerNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</BooleanSequencer>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -8586,14 +8514,10 @@ class BooleanToggle(_X3DChildNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</BooleanToggle>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -8642,14 +8566,10 @@ class BooleanTrigger(_X3DTriggerNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</BooleanTrigger>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -8761,14 +8681,10 @@ class BoundaryEnhancementVolumeStyle(_X3DComposableVolumeRenderStyleNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</BoundaryEnhancementVolumeStyle>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -8848,18 +8764,12 @@ class BoundedPhysicsModel(_X3DParticlePhysicsModelNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.geometry: # walk each child node, if any
-                for each in self.geometry:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.geometry: # output this SFNode
+                result += self.geometry.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</BoundedPhysicsModel>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -8938,14 +8848,10 @@ class Box(_X3DGeometryNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</Box>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -9081,14 +8987,10 @@ class CADAssembly(_X3DGroupingNode, _X3DProductStructureChildNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
             if self.children: # walk each child node, if any
                 for each in self.children:
@@ -9231,18 +9133,12 @@ class CADFace(_X3DProductStructureChildNode, _X3DBoundedObject):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.shape: # walk each child node, if any
-                for each in self.shape:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
+            if self.shape: # output this SFNode
+                result += self.shape.toXML(indentLevel=indentLevel+1)
             result += indent + '</CADFace>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -9379,14 +9275,10 @@ class CADLayer(_X3DGroupingNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
             if self.children: # walk each child node, if any
                 for each in self.children:
@@ -9601,14 +9493,10 @@ class CADPart(_X3DProductStructureChildNode, _X3DGroupingNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
             if self.children: # walk each child node, if any
                 for each in self.children:
@@ -9740,18 +9628,12 @@ class CartoonVolumeStyle(_X3DComposableVolumeRenderStyleNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.surfaceNormals: # walk each child node, if any
-                for each in self.surfaceNormals:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
+            if self.surfaceNormals: # output this SFNode
+                result += self.surfaceNormals.toXML(indentLevel=indentLevel+1)
             result += indent + '</CartoonVolumeStyle>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -9816,14 +9698,10 @@ class Circle2D(_X3DGeometryNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</Circle2D>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -9904,14 +9782,10 @@ class ClipPlane(_X3DChildNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</ClipPlane>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -10079,18 +9953,12 @@ class CollidableOffset(_X3DNBodyCollidableNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.collidable: # walk each child node, if any
-                for each in self.collidable:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.collidable: # output this SFNode
+                result += self.collidable.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</CollidableOffset>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -10258,18 +10126,12 @@ class CollidableShape(_X3DNBodyCollidableNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.shape: # walk each child node, if any
-                for each in self.shape:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
+            if self.shape: # output this SFNode
+                result += self.shape.toXML(indentLevel=indentLevel+1)
             result += indent + '</CollidableShape>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -10421,18 +10283,12 @@ class Collision(_X3DGroupingNode, _X3DSensorNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.proxy: # walk each child node, if any
-                for each in self.proxy:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
+            if self.proxy: # output this SFNode
+                result += self.proxy.toXML(indentLevel=indentLevel+1)
             ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
             if self.children: # walk each child node, if any
                 for each in self.children:
@@ -10664,7 +10520,7 @@ class CollisionCollection(_X3DChildNode, _X3DBoundedObject):
         if self.USE:
             result += " USE='" + self.USE + "'"
         if self.appliedParameters != ["BOUNCE"]:
-            result += " appliedParameters='" + self.appliedParameters + "'"
+            result += " appliedParameters='" + str(self.appliedParameters) + "'"
         if self.bboxCenter != (0, 0, 0):
             result += " bboxCenter='" + str(self.bboxCenter) + "'"
         if self.bboxSize != (-1, -1, -1):
@@ -10695,14 +10551,10 @@ class CollisionCollection(_X3DChildNode, _X3DBoundedObject):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
             if self.collidables: # walk each child node, if any
                 for each in self.collidables:
@@ -10785,18 +10637,12 @@ class CollisionSensor(_X3DSensorNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.collider: # walk each child node, if any
-                for each in self.collider:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.collider: # output this SFNode
+                result += self.collider.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</CollisionSensor>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -10946,14 +10792,10 @@ class CollisionSpace(_X3DNBodyCollisionSpaceNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
             if self.collidables: # walk each child node, if any
                 for each in self.collidables:
@@ -11022,14 +10864,10 @@ class Color(_X3DColorNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</Color>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -11126,14 +10964,10 @@ class ColorChaser(_X3DChaserNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</ColorChaser>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -11262,14 +11096,10 @@ class ColorDamper(_X3DDamperNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</ColorDamper>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -11349,14 +11179,10 @@ class ColorInterpolator(_X3DInterpolatorNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</ColorInterpolator>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -11421,14 +11247,10 @@ class ColorRGBA(_X3DColorNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</ColorRGBA>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -11567,38 +11389,22 @@ class ComposedCubeMapTexture(_X3DEnvironmentTextureNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.back: # walk each child node, if any
-                for each in self.back:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.bottom: # walk each child node, if any
-                for each in self.bottom:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.front: # walk each child node, if any
-                for each in self.front:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.left: # walk each child node, if any
-                for each in self.left:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.right: # walk each child node, if any
-                for each in self.right:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.top: # walk each child node, if any
-                for each in self.top:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.back: # output this SFNode
+                result += self.back.toXML(indentLevel=indentLevel+1)
+            if self.bottom: # output this SFNode
+                result += self.bottom.toXML(indentLevel=indentLevel+1)
+            if self.front: # output this SFNode
+                result += self.front.toXML(indentLevel=indentLevel+1)
+            if self.left: # output this SFNode
+                result += self.left.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
+            if self.right: # output this SFNode
+                result += self.right.toXML(indentLevel=indentLevel+1)
+            if self.top: # output this SFNode
+                result += self.top.toXML(indentLevel=indentLevel+1)
             result += indent + '</ComposedCubeMapTexture>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -11691,14 +11497,10 @@ class ComposedShader(_X3DShaderNode): # , _X3DProgrammableShaderObject # TODO fi
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
             if self.field: # walk each child node, if any
                 for each in self.field:
@@ -11827,18 +11629,12 @@ class ComposedTexture3D(_X3DTexture3DNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.textureProperties: # walk each child node, if any
-                for each in self.textureProperties:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
+            if self.textureProperties: # output this SFNode
+                result += self.textureProperties.toXML(indentLevel=indentLevel+1)
             ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
             if self.texture: # walk each child node, if any
                 for each in self.texture:
@@ -11919,14 +11715,10 @@ class ComposedVolumeStyle(_X3DComposableVolumeRenderStyleNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
             if self.renderStyle: # walk each child node, if any
                 for each in self.renderStyle:
@@ -12056,14 +11848,10 @@ class Cone(_X3DGeometryNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</Cone>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -12224,14 +12012,10 @@ class ConeEmitter(_X3DParticleEmitterNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</ConeEmitter>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -12496,7 +12280,7 @@ class Contact(_X3DNode):
         if self.USE:
             result += " USE='" + self.USE + "'"
         if self.appliedParameters != ["BOUNCE"]:
-            result += " appliedParameters='" + self.appliedParameters + "'"
+            result += " appliedParameters='" + str(self.appliedParameters) + "'"
         if self.bounce != 0:
             result += " bounce='" + str(self.bounce) + "'"
         if self.class_:
@@ -12525,30 +12309,18 @@ class Contact(_X3DNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.body1: # walk each child node, if any
-                for each in self.body1:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.body2: # walk each child node, if any
-                for each in self.body2:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.geometry1: # walk each child node, if any
-                for each in self.geometry1:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.geometry2: # walk each child node, if any
-                for each in self.geometry2:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.body1: # output this SFNode
+                result += self.body1.toXML(indentLevel=indentLevel+1)
+            if self.body2: # output this SFNode
+                result += self.body2.toXML(indentLevel=indentLevel+1)
+            if self.geometry1: # output this SFNode
+                result += self.geometry1.toXML(indentLevel=indentLevel+1)
+            if self.geometry2: # output this SFNode
+                result += self.geometry2.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</Contact>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -12610,14 +12382,10 @@ class Contour2D(_X3DNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
             if self.children: # walk each child node, if any
                 for each in self.children:
@@ -12685,14 +12453,10 @@ class ContourPolyline2D(_X3DNurbsControlCurveNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</ContourPolyline2D>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -12756,14 +12520,10 @@ class Coordinate(_X3DCoordinateNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</Coordinate>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -12858,14 +12618,10 @@ class CoordinateChaser(_X3DChaserNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</CoordinateChaser>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -12992,14 +12748,10 @@ class CoordinateDamper(_X3DDamperNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</CoordinateDamper>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -13063,14 +12815,10 @@ class CoordinateDouble(_X3DCoordinateNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</CoordinateDouble>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -13149,14 +12897,10 @@ class CoordinateInterpolator(_X3DInterpolatorNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</CoordinateInterpolator>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -13235,14 +12979,10 @@ class CoordinateInterpolator2D(_X3DInterpolatorNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</CoordinateInterpolator2D>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -13383,14 +13123,10 @@ class Cylinder(_X3DGeometryNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</Cylinder>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -13565,14 +13301,10 @@ class CylinderSensor(_X3DDragSensorNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</CylinderSensor>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -13713,14 +13445,10 @@ class DirectionalLight(_X3DLightNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</DirectionalLight>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -13842,14 +13570,10 @@ class DISEntityManager(_X3DChildNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
             if self.mapping: # walk each child node, if any
                 for each in self.mapping:
@@ -14030,19 +13754,15 @@ class DISEntityTypeMapping(_X3DInfoNode, _X3DUrlObject):
         if self.subcategory != 0:
             result += " subcategory='" + str(self.subcategory) + "'"
         if self.url != list():
-            result += " url='" + self.url + "'"
+            result += " url='" + str(self.url) + "'"
         if not self.hasChild():
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</DISEntityTypeMapping>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -14138,14 +13858,10 @@ class Disk2D(_X3DGeometryNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</Disk2D>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -14426,7 +14142,7 @@ class DoubleAxisHingeJoint(_X3DRigidJointNode):
         if self.desiredAngularVelocity2 != 0:
             result += " desiredAngularVelocity2='" + str(self.desiredAngularVelocity2) + "'"
         if self.forceOutput != ["NONE"]:
-            result += " forceOutput='" + self.forceOutput + "'"
+            result += " forceOutput='" + str(self.forceOutput) + "'"
         if self.maxAngle1 != 3.141592653:
             result += " maxAngle1='" + str(self.maxAngle1) + "'"
         if self.maxTorque1 != 0:
@@ -14449,22 +14165,14 @@ class DoubleAxisHingeJoint(_X3DRigidJointNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.body1: # walk each child node, if any
-                for each in self.body1:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.body2: # walk each child node, if any
-                for each in self.body2:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.body1: # output this SFNode
+                result += self.body1.toXML(indentLevel=indentLevel+1)
+            if self.body2: # output this SFNode
+                result += self.body2.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</DoubleAxisHingeJoint>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -14543,14 +14251,10 @@ class EaseInEaseOut(_X3DChildNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</EaseInEaseOut>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -14662,18 +14366,12 @@ class EdgeEnhancementVolumeStyle(_X3DComposableVolumeRenderStyleNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.surfaceNormals: # walk each child node, if any
-                for each in self.surfaceNormals:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
+            if self.surfaceNormals: # output this SFNode
+                result += self.surfaceNormals.toXML(indentLevel=indentLevel+1)
             result += indent + '</EdgeEnhancementVolumeStyle>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -14954,30 +14652,18 @@ class ElevationGrid(_X3DGeometryNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.color: # walk each child node, if any
-                for each in self.color:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.fogCoord: # walk each child node, if any
-                for each in self.fogCoord:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.normal: # walk each child node, if any
-                for each in self.normal:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.texCoord: # walk each child node, if any
-                for each in self.texCoord:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.color: # output this SFNode
+                result += self.color.toXML(indentLevel=indentLevel+1)
+            if self.fogCoord: # output this SFNode
+                result += self.fogCoord.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
+            if self.normal: # output this SFNode
+                result += self.normal.toXML(indentLevel=indentLevel+1)
+            if self.texCoord: # output this SFNode
+                result += self.texCoord.toXML(indentLevel=indentLevel+1)
             ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
             if self.attrib: # walk each child node, if any
                 for each in self.attrib:
@@ -15922,7 +15608,7 @@ class EspduTransform(_X3DGroupingNode, _X3DNetworkSensorNode):
         if self.geoCoords != (0, 0, 0):
             result += " geoCoords='" + str(self.geoCoords) + "'"
         if self.geoSystem != ["GD", "WE"]:
-            result += " geoSystem='" + self.geoSystem + "'"
+            result += " geoSystem='" + str(self.geoSystem) + "'"
         if self.linearAcceleration != (0, 0, 0):
             result += " linearAcceleration='" + str(self.linearAcceleration) + "'"
         if self.linearVelocity != (0, 0, 0):
@@ -15973,14 +15659,10 @@ class EspduTransform(_X3DGroupingNode, _X3DNetworkSensorNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
             if self.children: # walk each child node, if any
                 for each in self.children:
@@ -16112,14 +15794,10 @@ class ExplosionEmitter(_X3DParticleEmitterNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</ExplosionEmitter>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -16319,14 +15997,10 @@ class Extrusion(_X3DGeometryNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</Extrusion>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -16436,14 +16110,10 @@ class FillProperties(_X3DAppearanceChildNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</FillProperties>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -16539,14 +16209,10 @@ class FloatVertexAttribute(_X3DVertexAttributeNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</FloatVertexAttribute>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -16642,14 +16308,10 @@ class Fog(_X3DBindableNode, _X3DFogObject):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</Fog>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -16714,14 +16376,10 @@ class FogCoordinate(_X3DGeometricPropertyNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</FogCoordinate>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -16885,11 +16543,11 @@ class FontStyle(_X3DFontStyleNode):
         if self.class_:
             result += " class_='" + self.class_ + "'"
         if self.family != ["SERIF"]:
-            result += " family='" + self.family + "'"
+            result += " family='" + str(self.family) + "'"
         if self.horizontal != True:
             result += " horizontal='" + str(self.horizontal) + "'"
         if self.justify != ["BEGIN"]:
-            result += " justify='" + self.justify + "'"
+            result += " justify='" + str(self.justify) + "'"
         if self.language:
             result += " language='" + self.language + "'"
         if self.leftToRight != True:
@@ -16906,14 +16564,10 @@ class FontStyle(_X3DFontStyleNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</FontStyle>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -16992,14 +16646,10 @@ class ForcePhysicsModel(_X3DParticlePhysicsModelNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</ForcePhysicsModel>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -17094,18 +16744,12 @@ class GeneratedCubeMapTexture(_X3DEnvironmentTextureNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.textureProperties: # walk each child node, if any
-                for each in self.textureProperties:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
+            if self.textureProperties: # output this SFNode
+                result += self.textureProperties.toXML(indentLevel=indentLevel+1)
             result += indent + '</GeneratedCubeMapTexture>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -17192,25 +16836,19 @@ class GeoCoordinate(_X3DCoordinateNode):
         if self.class_:
             result += " class_='" + self.class_ + "'"
         if self.geoSystem != ["GD", "WE"]:
-            result += " geoSystem='" + self.geoSystem + "'"
+            result += " geoSystem='" + str(self.geoSystem) + "'"
         if self.point != list():
             result += " point='" + str(self.point) + "'"
         if not self.hasChild():
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.geoOrigin: # walk each child node, if any
-                for each in self.geoOrigin:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.geoOrigin: # output this SFNode
+                result += self.geoOrigin.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</GeoCoordinate>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -17502,7 +17140,7 @@ class GeoElevationGrid(_X3DGeometryNode):
         if self.geoGridOrigin != (0, 0, 0):
             result += " geoGridOrigin='" + str(self.geoGridOrigin) + "'"
         if self.geoSystem != ["GD", "WE"]:
-            result += " geoSystem='" + self.geoSystem + "'"
+            result += " geoSystem='" + str(self.geoSystem) + "'"
         if self.height != [0, 0, 0, 0]:
             result += " height='" + str(self.height) + "'"
         if self.normalPerVertex != True:
@@ -17523,30 +17161,18 @@ class GeoElevationGrid(_X3DGeometryNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.color: # walk each child node, if any
-                for each in self.color:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.geoOrigin: # walk each child node, if any
-                for each in self.geoOrigin:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.normal: # walk each child node, if any
-                for each in self.normal:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.texCoord: # walk each child node, if any
-                for each in self.texCoord:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.color: # output this SFNode
+                result += self.color.toXML(indentLevel=indentLevel+1)
+            if self.geoOrigin: # output this SFNode
+                result += self.geoOrigin.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
+            if self.normal: # output this SFNode
+                result += self.normal.toXML(indentLevel=indentLevel+1)
+            if self.texCoord: # output this SFNode
+                result += self.texCoord.toXML(indentLevel=indentLevel+1)
             result += indent + '</GeoElevationGrid>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -17705,25 +17331,19 @@ class GeoLocation(_X3DGroupingNode):
         if self.geoCoords != (0, 0, 0):
             result += " geoCoords='" + str(self.geoCoords) + "'"
         if self.geoSystem != ["GD", "WE"]:
-            result += " geoSystem='" + self.geoSystem + "'"
+            result += " geoSystem='" + str(self.geoSystem) + "'"
         if self.visible != True:
             result += " visible='" + str(self.visible) + "'"
         if not self.hasChild():
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.geoOrigin: # walk each child node, if any
-                for each in self.geoOrigin:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.geoOrigin: # output this SFNode
+                result += self.geoOrigin.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
             if self.children: # walk each child node, if any
                 for each in self.children:
@@ -17961,41 +17581,35 @@ class GeoLOD(_X3DChildNode, _X3DBoundedObject):
         if self.center != (0, 0, 0):
             result += " center='" + str(self.center) + "'"
         if self.child1Url != list():
-            result += " child1Url='" + self.child1Url + "'"
+            result += " child1Url='" + str(self.child1Url) + "'"
         if self.child2Url != list():
-            result += " child2Url='" + self.child2Url + "'"
+            result += " child2Url='" + str(self.child2Url) + "'"
         if self.child3Url != list():
-            result += " child3Url='" + self.child3Url + "'"
+            result += " child3Url='" + str(self.child3Url) + "'"
         if self.child4Url != list():
-            result += " child4Url='" + self.child4Url + "'"
+            result += " child4Url='" + str(self.child4Url) + "'"
         if self.class_:
             result += " class_='" + self.class_ + "'"
         if self.displayBBox != False:
             result += " displayBBox='" + str(self.displayBBox) + "'"
         if self.geoSystem != ["GD", "WE"]:
-            result += " geoSystem='" + self.geoSystem + "'"
+            result += " geoSystem='" + str(self.geoSystem) + "'"
         if self.range != 10:
             result += " range='" + str(self.range) + "'"
         if self.rootUrl != list():
-            result += " rootUrl='" + self.rootUrl + "'"
+            result += " rootUrl='" + str(self.rootUrl) + "'"
         if self.visible != True:
             result += " visible='" + str(self.visible) + "'"
         if not self.hasChild():
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.geoOrigin: # walk each child node, if any
-                for each in self.geoOrigin:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.geoOrigin: # output this SFNode
+                result += self.geoOrigin.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
             if self.rootNode: # walk each child node, if any
                 for each in self.rootNode:
@@ -18084,21 +17698,17 @@ class GeoMetadata(_X3DInfoNode, _X3DUrlObject):
         if self.class_:
             result += " class_='" + self.class_ + "'"
         if self.summary != list():
-            result += " summary='" + self.summary + "'"
+            result += " summary='" + str(self.summary) + "'"
         if self.url != list():
-            result += " url='" + self.url + "'"
+            result += " url='" + str(self.url) + "'"
         if not self.hasChild():
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
             if self.data: # walk each child node, if any
                 for each in self.data:
@@ -18189,21 +17799,17 @@ class GeoOrigin(_X3DNode):
         if self.geoCoords != (0, 0, 0):
             result += " geoCoords='" + str(self.geoCoords) + "'"
         if self.geoSystem != ["GD", "WE"]:
-            result += " geoSystem='" + self.geoSystem + "'"
+            result += " geoSystem='" + str(self.geoSystem) + "'"
         if self.rotateYUp != False:
             result += " rotateYUp='" + str(self.rotateYUp) + "'"
         if not self.hasChild():
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</GeoOrigin>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -18303,7 +17909,7 @@ class GeoPositionInterpolator(_X3DInterpolatorNode):
         if self.class_:
             result += " class_='" + self.class_ + "'"
         if self.geoSystem != ["GD", "WE"]:
-            result += " geoSystem='" + self.geoSystem + "'"
+            result += " geoSystem='" + str(self.geoSystem) + "'"
         if self.key != list():
             result += " key='" + str(self.key) + "'"
         if self.keyValue != list():
@@ -18312,18 +17918,12 @@ class GeoPositionInterpolator(_X3DInterpolatorNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.geoOrigin: # walk each child node, if any
-                for each in self.geoOrigin:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.geoOrigin: # output this SFNode
+                result += self.geoOrigin.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</GeoPositionInterpolator>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -18456,25 +18056,19 @@ class GeoProximitySensor(_X3DEnvironmentalSensorNode):
         if self.geoCenter != (0, 0, 0):
             result += " geoCenter='" + str(self.geoCenter) + "'"
         if self.geoSystem != ["GD", "WE"]:
-            result += " geoSystem='" + self.geoSystem + "'"
+            result += " geoSystem='" + str(self.geoSystem) + "'"
         if self.size != (0, 0, 0):
             result += " size='" + str(self.size) + "'"
         if not self.hasChild():
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.geoOrigin: # walk each child node, if any
-                for each in self.geoOrigin:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.geoOrigin: # output this SFNode
+                result += self.geoOrigin.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</GeoProximitySensor>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -18578,23 +18172,17 @@ class GeoTouchSensor(_X3DTouchSensorNode):
         if self.enabled != True:
             result += " enabled='" + str(self.enabled) + "'"
         if self.geoSystem != ["GD", "WE"]:
-            result += " geoSystem='" + self.geoSystem + "'"
+            result += " geoSystem='" + str(self.geoSystem) + "'"
         if not self.hasChild():
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.geoOrigin: # walk each child node, if any
-                for each in self.geoOrigin:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.geoOrigin: # output this SFNode
+                result += self.geoOrigin.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</GeoTouchSensor>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -18805,7 +18393,7 @@ class GeoTransform(_X3DGroupingNode):
         if self.geoCenter != (0, 0, 0):
             result += " geoCenter='" + str(self.geoCenter) + "'"
         if self.geoSystem != ["GD", "WE"]:
-            result += " geoSystem='" + self.geoSystem + "'"
+            result += " geoSystem='" + str(self.geoSystem) + "'"
         if self.rotation != (0, 0, 1, 0):
             result += " rotation='" + str(self.rotation) + "'"
         if self.scale != (1, 1, 1):
@@ -18820,18 +18408,12 @@ class GeoTransform(_X3DGroupingNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.geoOrigin: # walk each child node, if any
-                for each in self.geoOrigin:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.geoOrigin: # output this SFNode
+                result += self.geoOrigin.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
             if self.children: # walk each child node, if any
                 for each in self.children:
@@ -19022,7 +18604,7 @@ class GeoViewpoint(_X3DViewpointNode):
         if self.fieldOfView != 0.7854:
             result += " fieldOfView='" + str(self.fieldOfView) + "'"
         if self.geoSystem != ["GD", "WE"]:
-            result += " geoSystem='" + self.geoSystem + "'"
+            result += " geoSystem='" + str(self.geoSystem) + "'"
         if self.jump != True:
             result += " jump='" + str(self.jump) + "'"
         if self.orientation != (0, 0, 1, 0):
@@ -19037,18 +18619,12 @@ class GeoViewpoint(_X3DViewpointNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.geoOrigin: # walk each child node, if any
-                for each in self.geoOrigin:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.geoOrigin: # output this SFNode
+                result += self.geoOrigin.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</GeoViewpoint>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -19169,14 +18745,10 @@ class Group(_X3DGroupingNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
             if self.children: # walk each child node, if any
                 for each in self.children:
@@ -19304,14 +18876,10 @@ class HAnimDisplacer(_X3DGeometricPropertyNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</HAnimDisplacer>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -19757,7 +19325,7 @@ class HAnimHumanoid(_X3DChildNode, _X3DBoundedObject):
         if self.displayBBox != False:
             result += " displayBBox='" + str(self.displayBBox) + "'"
         if self.info != list():
-            result += " info='" + self.info + "'"
+            result += " info='" + str(self.info) + "'"
         if self.jointBindingPositions != [(0, 0, 0)]:
             result += " jointBindingPositions='" + str(self.jointBindingPositions) + "'"
         if self.jointBindingRotations != [(0, 0, 1, 0)]:
@@ -19786,30 +19354,18 @@ class HAnimHumanoid(_X3DChildNode, _X3DBoundedObject):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.skinBindingCoords: # walk each child node, if any
-                for each in self.skinBindingCoords:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.skinBindingNormals: # walk each child node, if any
-                for each in self.skinBindingNormals:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.skinCoord: # walk each child node, if any
-                for each in self.skinCoord:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.skinNormal: # walk each child node, if any
-                for each in self.skinNormal:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
+            if self.skinBindingCoords: # output this SFNode
+                result += self.skinBindingCoords.toXML(indentLevel=indentLevel+1)
+            if self.skinBindingNormals: # output this SFNode
+                result += self.skinBindingNormals.toXML(indentLevel=indentLevel+1)
+            if self.skinCoord: # output this SFNode
+                result += self.skinCoord.toXML(indentLevel=indentLevel+1)
+            if self.skinNormal: # output this SFNode
+                result += self.skinNormal.toXML(indentLevel=indentLevel+1)
             ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
             if self.joints: # walk each child node, if any
                 for each in self.joints:
@@ -20168,14 +19724,10 @@ class HAnimJoint(_X3DChildNode, _X3DBoundedObject):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
             if self.children: # walk each child node, if any
                 for each in self.children:
@@ -20400,7 +19952,7 @@ class HAnimMotion(_X3DChildNode):
         if self.USE:
             result += " USE='" + self.USE + "'"
         if self.channels != list():
-            result += " channels='" + self.channels + "'"
+            result += " channels='" + str(self.channels) + "'"
         if self.channelsEnabled != list():
             result += " channelsEnabled='" + str(self.channelsEnabled) + "'"
         if self.class_:
@@ -20418,7 +19970,7 @@ class HAnimMotion(_X3DChildNode):
         if self.frameIndex != 0:
             result += " frameIndex='" + str(self.frameIndex) + "'"
         if self.joints != list():
-            result += " joints='" + self.joints + "'"
+            result += " joints='" + str(self.joints) + "'"
         if self.loa != -1:
             result += " loa='" + str(self.loa) + "'"
         if self.loop != False:
@@ -20431,14 +19983,10 @@ class HAnimMotion(_X3DChildNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</HAnimMotion>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -20664,18 +20212,12 @@ class HAnimSegment(_X3DGroupingNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.coord: # walk each child node, if any
-                for each in self.coord:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.coord: # output this SFNode
+                result += self.coord.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
             if self.children: # walk each child node, if any
                 for each in self.children:
@@ -20909,14 +20451,10 @@ class HAnimSite(_X3DGroupingNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
             if self.children: # walk each child node, if any
                 for each in self.children:
@@ -20994,23 +20532,17 @@ class ImageCubeMapTexture(_X3DEnvironmentTextureNode, _X3DUrlObject):
         if self.class_:
             result += " class_='" + self.class_ + "'"
         if self.url != list():
-            result += " url='" + self.url + "'"
+            result += " url='" + str(self.url) + "'"
         if not self.hasChild():
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.textureProperties: # walk each child node, if any
-                for each in self.textureProperties:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
+            if self.textureProperties: # output this SFNode
+                result += self.textureProperties.toXML(indentLevel=indentLevel+1)
             result += indent + '</ImageCubeMapTexture>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -21114,23 +20646,17 @@ class ImageTexture(_X3DTexture2DNode, _X3DUrlObject):
         if self.repeatT != True:
             result += " repeatT='" + str(self.repeatT) + "'"
         if self.url != list():
-            result += " url='" + self.url + "'"
+            result += " url='" + str(self.url) + "'"
         if not self.hasChild():
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.textureProperties: # walk each child node, if any
-                for each in self.textureProperties:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
+            if self.textureProperties: # output this SFNode
+                result += self.textureProperties.toXML(indentLevel=indentLevel+1)
             result += indent + '</ImageTexture>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -21249,23 +20775,17 @@ class ImageTexture3D(_X3DTexture3DNode, _X3DUrlObject):
         if self.repeatT != False:
             result += " repeatT='" + str(self.repeatT) + "'"
         if self.url != list():
-            result += " url='" + self.url + "'"
+            result += " url='" + str(self.url) + "'"
         if not self.hasChild():
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.textureProperties: # walk each child node, if any
-                for each in self.textureProperties:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
+            if self.textureProperties: # output this SFNode
+                result += self.textureProperties.toXML(indentLevel=indentLevel+1)
             result += indent + '</ImageTexture3D>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -21562,34 +21082,20 @@ class IndexedFaceSet(_X3DComposedGeometryNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.color: # walk each child node, if any
-                for each in self.color:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.coord: # walk each child node, if any
-                for each in self.coord:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.fogCoord: # walk each child node, if any
-                for each in self.fogCoord:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.normal: # walk each child node, if any
-                for each in self.normal:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.texCoord: # walk each child node, if any
-                for each in self.texCoord:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.color: # output this SFNode
+                result += self.color.toXML(indentLevel=indentLevel+1)
+            if self.coord: # output this SFNode
+                result += self.coord.toXML(indentLevel=indentLevel+1)
+            if self.fogCoord: # output this SFNode
+                result += self.fogCoord.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
+            if self.normal: # output this SFNode
+                result += self.normal.toXML(indentLevel=indentLevel+1)
+            if self.texCoord: # output this SFNode
+                result += self.texCoord.toXML(indentLevel=indentLevel+1)
             ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
             if self.attrib: # walk each child node, if any
                 for each in self.attrib:
@@ -21750,26 +21256,16 @@ class IndexedLineSet(_X3DGeometryNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.color: # walk each child node, if any
-                for each in self.color:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.coord: # walk each child node, if any
-                for each in self.coord:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.fogCoord: # walk each child node, if any
-                for each in self.fogCoord:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.color: # output this SFNode
+                result += self.color.toXML(indentLevel=indentLevel+1)
+            if self.coord: # output this SFNode
+                result += self.coord.toXML(indentLevel=indentLevel+1)
+            if self.fogCoord: # output this SFNode
+                result += self.fogCoord.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
             if self.attrib: # walk each child node, if any
                 for each in self.attrib:
@@ -21991,34 +21487,20 @@ class IndexedQuadSet(_X3DComposedGeometryNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.color: # walk each child node, if any
-                for each in self.color:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.coord: # walk each child node, if any
-                for each in self.coord:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.fogCoord: # walk each child node, if any
-                for each in self.fogCoord:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.normal: # walk each child node, if any
-                for each in self.normal:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.texCoord: # walk each child node, if any
-                for each in self.texCoord:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.color: # output this SFNode
+                result += self.color.toXML(indentLevel=indentLevel+1)
+            if self.coord: # output this SFNode
+                result += self.coord.toXML(indentLevel=indentLevel+1)
+            if self.fogCoord: # output this SFNode
+                result += self.fogCoord.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
+            if self.normal: # output this SFNode
+                result += self.normal.toXML(indentLevel=indentLevel+1)
+            if self.texCoord: # output this SFNode
+                result += self.texCoord.toXML(indentLevel=indentLevel+1)
             ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
             if self.attrib: # walk each child node, if any
                 for each in self.attrib:
@@ -22240,34 +21722,20 @@ class IndexedTriangleFanSet(_X3DComposedGeometryNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.color: # walk each child node, if any
-                for each in self.color:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.coord: # walk each child node, if any
-                for each in self.coord:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.fogCoord: # walk each child node, if any
-                for each in self.fogCoord:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.normal: # walk each child node, if any
-                for each in self.normal:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.texCoord: # walk each child node, if any
-                for each in self.texCoord:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.color: # output this SFNode
+                result += self.color.toXML(indentLevel=indentLevel+1)
+            if self.coord: # output this SFNode
+                result += self.coord.toXML(indentLevel=indentLevel+1)
+            if self.fogCoord: # output this SFNode
+                result += self.fogCoord.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
+            if self.normal: # output this SFNode
+                result += self.normal.toXML(indentLevel=indentLevel+1)
+            if self.texCoord: # output this SFNode
+                result += self.texCoord.toXML(indentLevel=indentLevel+1)
             ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
             if self.attrib: # walk each child node, if any
                 for each in self.attrib:
@@ -22489,34 +21957,20 @@ class IndexedTriangleSet(_X3DComposedGeometryNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.color: # walk each child node, if any
-                for each in self.color:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.coord: # walk each child node, if any
-                for each in self.coord:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.fogCoord: # walk each child node, if any
-                for each in self.fogCoord:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.normal: # walk each child node, if any
-                for each in self.normal:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.texCoord: # walk each child node, if any
-                for each in self.texCoord:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.color: # output this SFNode
+                result += self.color.toXML(indentLevel=indentLevel+1)
+            if self.coord: # output this SFNode
+                result += self.coord.toXML(indentLevel=indentLevel+1)
+            if self.fogCoord: # output this SFNode
+                result += self.fogCoord.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
+            if self.normal: # output this SFNode
+                result += self.normal.toXML(indentLevel=indentLevel+1)
+            if self.texCoord: # output this SFNode
+                result += self.texCoord.toXML(indentLevel=indentLevel+1)
             ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
             if self.attrib: # walk each child node, if any
                 for each in self.attrib:
@@ -22738,34 +22192,20 @@ class IndexedTriangleStripSet(_X3DComposedGeometryNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.color: # walk each child node, if any
-                for each in self.color:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.coord: # walk each child node, if any
-                for each in self.coord:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.fogCoord: # walk each child node, if any
-                for each in self.fogCoord:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.normal: # walk each child node, if any
-                for each in self.normal:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.texCoord: # walk each child node, if any
-                for each in self.texCoord:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.color: # output this SFNode
+                result += self.color.toXML(indentLevel=indentLevel+1)
+            if self.coord: # output this SFNode
+                result += self.coord.toXML(indentLevel=indentLevel+1)
+            if self.fogCoord: # output this SFNode
+                result += self.fogCoord.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
+            if self.normal: # output this SFNode
+                result += self.normal.toXML(indentLevel=indentLevel+1)
+            if self.texCoord: # output this SFNode
+                result += self.texCoord.toXML(indentLevel=indentLevel+1)
             ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
             if self.attrib: # walk each child node, if any
                 for each in self.attrib:
@@ -22900,21 +22340,17 @@ class Inline(_X3DChildNode, _X3DBoundedObject, _X3DUrlObject):
         if self.load != True:
             result += " load='" + str(self.load) + "'"
         if self.url != list():
-            result += " url='" + self.url + "'"
+            result += " url='" + str(self.url) + "'"
         if self.visible != True:
             result += " visible='" + str(self.visible) + "'"
         if not self.hasChild():
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</Inline>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -22993,14 +22429,10 @@ class IntegerSequencer(_X3DSequencerNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</IntegerSequencer>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -23064,14 +22496,10 @@ class IntegerTrigger(_X3DTriggerNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</IntegerTrigger>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -23286,22 +22714,14 @@ class IsoSurfaceVolumeData(_X3DVolumeDataNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.gradients: # walk each child node, if any
-                for each in self.gradients:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.voxels: # walk each child node, if any
-                for each in self.voxels:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.gradients: # output this SFNode
+                result += self.gradients.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
+            if self.voxels: # output this SFNode
+                result += self.voxels.toXML(indentLevel=indentLevel+1)
             ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
             if self.renderStyle: # walk each child node, if any
                 for each in self.renderStyle:
@@ -23369,14 +22789,10 @@ class KeySensor(_X3DKeyDeviceSensorNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</KeySensor>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -23428,6 +22844,7 @@ class Layer(_X3DLayerNode):
         self.__objectType = objectType
     @property # getter - - - - - - - - - -
     def pickable(self):
+        """pickable determines whether pick traversal is performed for this layer."""
         return self.__pickable
     @pickable.setter
     def pickable(self, pickable=None):
@@ -23487,7 +22904,7 @@ class Layer(_X3DLayerNode):
         if self.class_:
             result += " class_='" + self.class_ + "'"
         if self.objectType != ["ALL"]:
-            result += " objectType='" + self.objectType + "'"
+            result += " objectType='" + str(self.objectType) + "'"
         if self.pickable != True:
             result += " pickable='" + str(self.pickable) + "'"
         if self.visible != True:
@@ -23496,18 +22913,12 @@ class Layer(_X3DLayerNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.viewport: # walk each child node, if any
-                for each in self.viewport:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
+            if self.viewport: # output this SFNode
+                result += self.viewport.toXML(indentLevel=indentLevel+1)
             ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
             if self.children: # walk each child node, if any
                 for each in self.children:
@@ -23605,14 +23016,10 @@ class LayerSet(_X3DNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
             if self.layers: # walk each child node, if any
                 for each in self.layers:
@@ -23738,31 +23145,27 @@ class Layout(_X3DLayoutNode): #  # TODO fix additional inheritance method resolu
         if self.USE:
             result += " USE='" + self.USE + "'"
         if self.align != ["CENTER", "CENTER"]:
-            result += " align='" + self.align + "'"
+            result += " align='" + str(self.align) + "'"
         if self.class_:
             result += " class_='" + self.class_ + "'"
         if self.offset != [0, 0]:
             result += " offset='" + str(self.offset) + "'"
         if self.offsetUnits != ["WORLD", "WORLD"]:
-            result += " offsetUnits='" + self.offsetUnits + "'"
+            result += " offsetUnits='" + str(self.offsetUnits) + "'"
         if self.scaleMode != ["NONE", "NONE"]:
-            result += " scaleMode='" + self.scaleMode + "'"
+            result += " scaleMode='" + str(self.scaleMode) + "'"
         if self.size != [1, 1]:
             result += " size='" + str(self.size) + "'"
         if self.sizeUnits != ["WORLD", "WORLD"]:
-            result += " sizeUnits='" + self.sizeUnits + "'"
+            result += " sizeUnits='" + str(self.sizeUnits) + "'"
         if not self.hasChild():
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</Layout>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -23915,22 +23318,14 @@ class LayoutGroup(_X3DNode): # , _X3DGroupingNode # TODO fix additional inherita
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.layout: # walk each child node, if any
-                for each in self.layout:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.viewport: # walk each child node, if any
-                for each in self.viewport:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.layout: # output this SFNode
+                result += self.layout.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
+            if self.viewport: # output this SFNode
+                result += self.viewport.toXML(indentLevel=indentLevel+1)
             ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
             if self.children: # walk each child node, if any
                 for each in self.children:
@@ -23989,6 +23384,7 @@ class LayoutLayer(_X3DLayerNode): #  # TODO fix additional inheritance method re
         self.__objectType = objectType
     @property # getter - - - - - - - - - -
     def pickable(self):
+        """pickable determines whether pick traversal is performed for this layer."""
         return self.__pickable
     @pickable.setter
     def pickable(self, pickable=None):
@@ -24061,7 +23457,7 @@ class LayoutLayer(_X3DLayerNode): #  # TODO fix additional inheritance method re
         if self.class_:
             result += " class_='" + self.class_ + "'"
         if self.objectType != ["ALL"]:
-            result += " objectType='" + self.objectType + "'"
+            result += " objectType='" + str(self.objectType) + "'"
         if self.pickable != True:
             result += " pickable='" + str(self.pickable) + "'"
         if self.visible != True:
@@ -24070,22 +23466,14 @@ class LayoutLayer(_X3DLayerNode): #  # TODO fix additional inheritance method re
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.layout: # walk each child node, if any
-                for each in self.layout:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.viewport: # walk each child node, if any
-                for each in self.viewport:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.layout: # output this SFNode
+                result += self.layout.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
+            if self.viewport: # output this SFNode
+                result += self.viewport.toXML(indentLevel=indentLevel+1)
             ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
             if self.children: # walk each child node, if any
                 for each in self.children:
@@ -24235,25 +23623,19 @@ class LinePickSensor(_X3DPickSensorNode):
         if self.matchCriterion != 'MATCH_ANY':
             result += " matchCriterion='" + self.matchCriterion + "'"
         if self.objectType != ["ALL"]:
-            result += " objectType='" + self.objectType + "'"
+            result += " objectType='" + str(self.objectType) + "'"
         if self.sortOrder != 'CLOSEST':
             result += " sortOrder='" + self.sortOrder + "'"
         if not self.hasChild():
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.pickingGeometry: # walk each child node, if any
-                for each in self.pickingGeometry:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
+            if self.pickingGeometry: # output this SFNode
+                result += self.pickingGeometry.toXML(indentLevel=indentLevel+1)
             ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
             if self.pickTarget: # walk each child node, if any
                 for each in self.pickTarget:
@@ -24352,14 +23734,10 @@ class LineProperties(_X3DAppearanceChildNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</LineProperties>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -24485,26 +23863,16 @@ class LineSet(_X3DGeometryNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.color: # walk each child node, if any
-                for each in self.color:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.coord: # walk each child node, if any
-                for each in self.coord:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.fogCoord: # walk each child node, if any
-                for each in self.fogCoord:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.color: # output this SFNode
+                result += self.color.toXML(indentLevel=indentLevel+1)
+            if self.coord: # output this SFNode
+                result += self.coord.toXML(indentLevel=indentLevel+1)
+            if self.fogCoord: # output this SFNode
+                result += self.fogCoord.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
             if self.attrib: # walk each child node, if any
                 for each in self.attrib:
@@ -24601,14 +23969,10 @@ class LoadSensor(_X3DNetworkSensorNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
             if self.watchList: # walk each child node, if any
                 for each in self.watchList:
@@ -24723,14 +24087,10 @@ class LocalFog(_X3DChildNode, _X3DFogObject):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</LocalFog>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -24896,14 +24256,10 @@ class LOD(_X3DGroupingNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
             if self.children: # walk each child node, if any
                 for each in self.children:
@@ -25052,14 +24408,10 @@ class Material(_X3DMaterialNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</Material>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -25138,14 +24490,10 @@ class Matrix3VertexAttribute(_X3DVertexAttributeNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</Matrix3VertexAttribute>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -25224,14 +24572,10 @@ class Matrix4VertexAttribute(_X3DVertexAttributeNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</Matrix4VertexAttribute>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -25325,14 +24669,10 @@ class MetadataBoolean(_X3DNode): # , _X3DMetadataObject # TODO fix additional in
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</MetadataBoolean>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -25426,14 +24766,10 @@ class MetadataDouble(_X3DNode): # , _X3DMetadataObject # TODO fix additional inh
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</MetadataDouble>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -25527,14 +24863,10 @@ class MetadataFloat(_X3DNode): # , _X3DMetadataObject # TODO fix additional inhe
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</MetadataFloat>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -25628,14 +24960,10 @@ class MetadataInteger(_X3DNode): # , _X3DMetadataObject # TODO fix additional in
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</MetadataInteger>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -25726,14 +25054,10 @@ class MetadataSet(_X3DNode): # , _X3DMetadataObject # TODO fix additional inheri
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
             if self.value: # walk each child node, if any
                 for each in self.value:
@@ -25826,19 +25150,15 @@ class MetadataString(_X3DNode): # , _X3DMetadataObject # TODO fix additional inh
         if self.reference:
             result += " reference='" + self.reference + "'"
         if self.value != list():
-            result += " value='" + self.value + "'"
+            result += " value='" + str(self.value) + "'"
         if not self.hasChild():
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</MetadataString>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -26166,7 +25486,7 @@ class MotorJoint(_X3DRigidJointNode):
         if self.enabledAxes != 1:
             result += " enabledAxes='" + str(self.enabledAxes) + "'"
         if self.forceOutput != ["NONE"]:
-            result += " forceOutput='" + self.forceOutput + "'"
+            result += " forceOutput='" + str(self.forceOutput) + "'"
         if self.motor1Axis != (0, 0, 0):
             result += " motor1Axis='" + str(self.motor1Axis) + "'"
         if self.motor2Axis != (0, 0, 0):
@@ -26189,22 +25509,14 @@ class MotorJoint(_X3DRigidJointNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.body1: # walk each child node, if any
-                for each in self.body1:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.body2: # walk each child node, if any
-                for each in self.body2:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.body1: # output this SFNode
+                result += self.body1.toXML(indentLevel=indentLevel+1)
+            if self.body2: # output this SFNode
+                result += self.body2.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</MotorJoint>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -26428,23 +25740,17 @@ class MovieTexture(_X3DSoundSourceNode, _X3DTexture2DNode, _X3DUrlObject):
         if self.stopTime != 0:
             result += " stopTime='" + str(self.stopTime) + "'"
         if self.url != list():
-            result += " url='" + self.url + "'"
+            result += " url='" + str(self.url) + "'"
         if not self.hasChild():
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.textureProperties: # walk each child node, if any
-                for each in self.textureProperties:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
+            if self.textureProperties: # output this SFNode
+                result += self.textureProperties.toXML(indentLevel=indentLevel+1)
             result += indent + '</MovieTexture>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -26574,23 +25880,19 @@ class MultiTexture(_X3DTextureNode):
         if self.color != (1, 1, 1):
             result += " color='" + str(self.color) + "'"
         if self.function != list():
-            result += " function='" + self.function + "'"
+            result += " function='" + str(self.function) + "'"
         if self.mode != list():
-            result += " mode='" + self.mode + "'"
+            result += " mode='" + str(self.mode) + "'"
         if self.source != list():
-            result += " source='" + self.source + "'"
+            result += " source='" + str(self.source) + "'"
         if not self.hasChild():
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
             if self.texture: # walk each child node, if any
                 for each in self.texture:
@@ -26656,14 +25958,10 @@ class MultiTextureCoordinate(_X3DTextureCoordinateNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
             if self.texCoord: # walk each child node, if any
                 for each in self.texCoord:
@@ -26729,14 +26027,10 @@ class MultiTextureTransform(_X3DTextureTransformNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
             if self.textureTransform: # walk each child node, if any
                 for each in self.textureTransform:
@@ -26889,23 +26183,19 @@ class NavigationInfo(_X3DBindableNode):
         if self.transitionTime != 1.0:
             result += " transitionTime='" + str(self.transitionTime) + "'"
         if self.transitionType != ["LINEAR"]:
-            result += " transitionType='" + self.transitionType + "'"
+            result += " transitionType='" + str(self.transitionType) + "'"
         if self.type != ["EXAMINE", "ANY"]:
-            result += " type='" + self.type + "'"
+            result += " type='" + str(self.type) + "'"
         if self.visibilityLimit != 0:
             result += " visibilityLimit='" + str(self.visibilityLimit) + "'"
         if not self.hasChild():
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</NavigationInfo>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -26971,14 +26261,10 @@ class Normal(_X3DNormalNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</Normal>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -27057,14 +26343,10 @@ class NormalInterpolator(_X3DInterpolatorNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</NormalInterpolator>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -27205,18 +26487,12 @@ class NurbsCurve(_X3DParametricGeometryNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.controlPoint: # walk each child node, if any
-                for each in self.controlPoint:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.controlPoint: # output this SFNode
+                result += self.controlPoint.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</NurbsCurve>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -27357,14 +26633,10 @@ class NurbsCurve2D(_X3DNurbsControlCurveNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</NurbsCurve2D>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -27475,18 +26747,12 @@ class NurbsOrientationInterpolator(_X3DChildNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.controlPoint: # walk each child node, if any
-                for each in self.controlPoint:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.controlPoint: # output this SFNode
+                result += self.controlPoint.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</NurbsOrientationInterpolator>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -27752,22 +27018,14 @@ class NurbsPatchSurface(_X3DNurbsSurfaceGeometryNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.controlPoint: # walk each child node, if any
-                for each in self.controlPoint:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.texCoord: # walk each child node, if any
-                for each in self.texCoord:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.controlPoint: # output this SFNode
+                result += self.controlPoint.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
+            if self.texCoord: # output this SFNode
+                result += self.texCoord.toXML(indentLevel=indentLevel+1)
             result += indent + '</NurbsPatchSurface>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -27878,18 +27136,12 @@ class NurbsPositionInterpolator(_X3DChildNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.controlPoint: # walk each child node, if any
-                for each in self.controlPoint:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.controlPoint: # output this SFNode
+                result += self.controlPoint.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</NurbsPositionInterpolator>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -28026,14 +27278,10 @@ class NurbsSet(_X3DChildNode, _X3DBoundedObject):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
             if self.geometry: # walk each child node, if any
                 for each in self.geometry:
@@ -28211,18 +27459,12 @@ class NurbsSurfaceInterpolator(_X3DChildNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.controlPoint: # walk each child node, if any
-                for each in self.controlPoint:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.controlPoint: # output this SFNode
+                result += self.controlPoint.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</NurbsSurfaceInterpolator>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -28331,22 +27573,14 @@ class NurbsSweptSurface(_X3DParametricGeometryNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.crossSectionCurve: # walk each child node, if any
-                for each in self.crossSectionCurve:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.trajectoryCurve: # walk each child node, if any
-                for each in self.trajectoryCurve:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.crossSectionCurve: # output this SFNode
+                result += self.crossSectionCurve.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
+            if self.trajectoryCurve: # output this SFNode
+                result += self.trajectoryCurve.toXML(indentLevel=indentLevel+1)
             result += indent + '</NurbsSweptSurface>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -28455,22 +27689,14 @@ class NurbsSwungSurface(_X3DParametricGeometryNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.profileCurve: # walk each child node, if any
-                for each in self.profileCurve:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.trajectoryCurve: # walk each child node, if any
-                for each in self.trajectoryCurve:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
+            if self.profileCurve: # output this SFNode
+                result += self.profileCurve.toXML(indentLevel=indentLevel+1)
+            if self.trajectoryCurve: # output this SFNode
+                result += self.trajectoryCurve.toXML(indentLevel=indentLevel+1)
             result += indent + '</NurbsSwungSurface>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -28644,14 +27870,10 @@ class NurbsTextureCoordinate(_X3DNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</NurbsTextureCoordinate>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -28930,22 +28152,14 @@ class NurbsTrimmedSurface(_X3DNurbsSurfaceGeometryNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.controlPoint: # walk each child node, if any
-                for each in self.controlPoint:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.texCoord: # walk each child node, if any
-                for each in self.texCoord:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.controlPoint: # output this SFNode
+                result += self.controlPoint.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
+            if self.texCoord: # output this SFNode
+                result += self.texCoord.toXML(indentLevel=indentLevel+1)
             ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
             if self.trimmingContour: # walk each child node, if any
                 for each in self.trimmingContour:
@@ -29028,18 +28242,12 @@ class OpacityMapVolumeStyle(_X3DComposableVolumeRenderStyleNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.transferFunction: # walk each child node, if any
-                for each in self.transferFunction:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
+            if self.transferFunction: # output this SFNode
+                result += self.transferFunction.toXML(indentLevel=indentLevel+1)
             result += indent + '</OpacityMapVolumeStyle>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -29134,14 +28342,10 @@ class OrientationChaser(_X3DChaserNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</OrientationChaser>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -29268,14 +28472,10 @@ class OrientationDamper(_X3DDamperNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</OrientationDamper>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -29354,14 +28554,10 @@ class OrientationInterpolator(_X3DInterpolatorNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</OrientationInterpolator>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -29515,14 +28711,10 @@ class OrthoViewpoint(_X3DViewpointNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</OrthoViewpoint>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -29612,19 +28804,15 @@ class PackagedShader(_X3DShaderNode): # , _X3DUrlObject, _X3DProgrammableShaderO
         if self.language:
             result += " language='" + self.language + "'"
         if self.url != list():
-            result += " url='" + self.url + "'"
+            result += " url='" + str(self.url) + "'"
         if not self.hasChild():
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
             if self.field: # walk each child node, if any
                 for each in self.field:
@@ -29984,34 +29172,20 @@ class ParticleSystem(_X3DShapeNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.appearance: # walk each child node, if any
-                for each in self.appearance:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.colorRamp: # walk each child node, if any
-                for each in self.colorRamp:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.emitter: # walk each child node, if any
-                for each in self.emitter:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.geometry: # walk each child node, if any
-                for each in self.geometry:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.texCoordRamp: # walk each child node, if any
-                for each in self.texCoordRamp:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.appearance: # output this SFNode
+                result += self.appearance.toXML(indentLevel=indentLevel+1)
+            if self.colorRamp: # output this SFNode
+                result += self.colorRamp.toXML(indentLevel=indentLevel+1)
+            if self.emitter: # output this SFNode
+                result += self.emitter.toXML(indentLevel=indentLevel+1)
+            if self.geometry: # output this SFNode
+                result += self.geometry.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
+            if self.texCoordRamp: # output this SFNode
+                result += self.texCoordRamp.toXML(indentLevel=indentLevel+1)
             ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
             if self.physics: # walk each child node, if any
                 for each in self.physics:
@@ -30157,7 +29331,7 @@ class PickableGroup(_X3DGroupingNode, _X3DPickableObject):
         if self.displayBBox != False:
             result += " displayBBox='" + str(self.displayBBox) + "'"
         if self.objectType != ["ALL"]:
-            result += " objectType='" + self.objectType + "'"
+            result += " objectType='" + str(self.objectType) + "'"
         if self.pickable != True:
             result += " pickable='" + str(self.pickable) + "'"
         if self.visible != True:
@@ -30166,14 +29340,10 @@ class PickableGroup(_X3DGroupingNode, _X3DPickableObject):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
             if self.children: # walk each child node, if any
                 for each in self.children:
@@ -30286,18 +29456,12 @@ class PixelTexture(_X3DTexture2DNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.textureProperties: # walk each child node, if any
-                for each in self.textureProperties:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
+            if self.textureProperties: # output this SFNode
+                result += self.textureProperties.toXML(indentLevel=indentLevel+1)
             result += indent + '</PixelTexture>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -30421,18 +29585,12 @@ class PixelTexture3D(_X3DTexture3DNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.textureProperties: # walk each child node, if any
-                for each in self.textureProperties:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
+            if self.textureProperties: # output this SFNode
+                result += self.textureProperties.toXML(indentLevel=indentLevel+1)
             result += indent + '</PixelTexture3D>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -30586,14 +29744,10 @@ class PlaneSensor(_X3DDragSensorNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</PlaneSensor>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -30736,14 +29890,10 @@ class PointEmitter(_X3DParticleEmitterNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</PointEmitter>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -30916,14 +30066,10 @@ class PointLight(_X3DLightNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</PointLight>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -31069,25 +30215,19 @@ class PointPickSensor(_X3DPickSensorNode):
         if self.matchCriterion != 'MATCH_ANY':
             result += " matchCriterion='" + self.matchCriterion + "'"
         if self.objectType != ["ALL"]:
-            result += " objectType='" + self.objectType + "'"
+            result += " objectType='" + str(self.objectType) + "'"
         if self.sortOrder != 'CLOSEST':
             result += " sortOrder='" + self.sortOrder + "'"
         if not self.hasChild():
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.pickingGeometry: # walk each child node, if any
-                for each in self.pickingGeometry:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
+            if self.pickingGeometry: # output this SFNode
+                result += self.pickingGeometry.toXML(indentLevel=indentLevel+1)
             ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
             if self.pickTarget: # walk each child node, if any
                 for each in self.pickTarget:
@@ -31218,14 +30358,10 @@ class PointProperties(_X3DAppearanceChildNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</PointProperties>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -31335,26 +30471,16 @@ class PointSet(_X3DGeometryNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.color: # walk each child node, if any
-                for each in self.color:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.coord: # walk each child node, if any
-                for each in self.coord:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.fogCoord: # walk each child node, if any
-                for each in self.fogCoord:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.color: # output this SFNode
+                result += self.color.toXML(indentLevel=indentLevel+1)
+            if self.coord: # output this SFNode
+                result += self.coord.toXML(indentLevel=indentLevel+1)
+            if self.fogCoord: # output this SFNode
+                result += self.fogCoord.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
             if self.attrib: # walk each child node, if any
                 for each in self.attrib:
@@ -31422,14 +30548,10 @@ class Polyline2D(_X3DGeometryNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</Polyline2D>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -31591,18 +30713,12 @@ class PolylineEmitter(_X3DParticleEmitterNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.coord: # walk each child node, if any
-                for each in self.coord:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.coord: # output this SFNode
+                result += self.coord.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</PolylineEmitter>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -31666,14 +30782,10 @@ class Polypoint2D(_X3DGeometryNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</Polypoint2D>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -31768,14 +30880,10 @@ class PositionChaser(_X3DChaserNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</PositionChaser>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -31870,14 +30978,10 @@ class PositionChaser2D(_X3DChaserNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</PositionChaser2D>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -32004,14 +31108,10 @@ class PositionDamper(_X3DDamperNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</PositionDamper>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -32138,14 +31238,10 @@ class PositionDamper2D(_X3DDamperNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</PositionDamper2D>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -32224,14 +31320,10 @@ class PositionInterpolator(_X3DInterpolatorNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</PositionInterpolator>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -32310,14 +31402,10 @@ class PositionInterpolator2D(_X3DInterpolatorNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</PositionInterpolator2D>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -32463,25 +31551,19 @@ class PrimitivePickSensor(_X3DPickSensorNode):
         if self.matchCriterion != 'MATCH_ANY':
             result += " matchCriterion='" + self.matchCriterion + "'"
         if self.objectType != ["ALL"]:
-            result += " objectType='" + self.objectType + "'"
+            result += " objectType='" + str(self.objectType) + "'"
         if self.sortOrder != 'CLOSEST':
             result += " sortOrder='" + self.sortOrder + "'"
         if not self.hasChild():
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.pickingGeometry: # walk each child node, if any
-                for each in self.pickingGeometry:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
+            if self.pickingGeometry: # output this SFNode
+                result += self.pickingGeometry.toXML(indentLevel=indentLevel+1)
             ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
             if self.pickTarget: # walk each child node, if any
                 for each in self.pickTarget:
@@ -32561,14 +31643,10 @@ class ProgramShader(_X3DShaderNode): #  # TODO fix additional inheritance method
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
             if self.programs: # walk each child node, if any
                 for each in self.programs:
@@ -32667,14 +31745,10 @@ class ProjectionVolumeStyle(_X3DVolumeRenderStyleNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</ProjectionVolumeStyle>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -32754,14 +31828,10 @@ class ProtoInstance(_X3DPrototypeInstance, _X3DChildNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
             if self.fieldValue: # walk each child node, if any
                 for each in self.fieldValue:
@@ -32860,14 +31930,10 @@ class ProximitySensor(_X3DEnvironmentalSensorNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</ProximitySensor>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -33069,34 +32135,20 @@ class QuadSet(_X3DComposedGeometryNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.color: # walk each child node, if any
-                for each in self.color:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.coord: # walk each child node, if any
-                for each in self.coord:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.fogCoord: # walk each child node, if any
-                for each in self.fogCoord:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.normal: # walk each child node, if any
-                for each in self.normal:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.texCoord: # walk each child node, if any
-                for each in self.texCoord:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.color: # output this SFNode
+                result += self.color.toXML(indentLevel=indentLevel+1)
+            if self.coord: # output this SFNode
+                result += self.coord.toXML(indentLevel=indentLevel+1)
+            if self.fogCoord: # output this SFNode
+                result += self.fogCoord.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
+            if self.normal: # output this SFNode
+                result += self.normal.toXML(indentLevel=indentLevel+1)
+            if self.texCoord: # output this SFNode
+                result += self.texCoord.toXML(indentLevel=indentLevel+1)
             ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
             if self.attrib: # walk each child node, if any
                 for each in self.attrib:
@@ -33501,7 +32553,7 @@ class ReceiverPdu(_X3DNetworkSensorNode, _X3DBoundedObject):
         if self.geoCoords != (0, 0, 0):
             result += " geoCoords='" + str(self.geoCoords) + "'"
         if self.geoSystem != ["GD", "WE"]:
-            result += " geoSystem='" + self.geoSystem + "'"
+            result += " geoSystem='" + str(self.geoSystem) + "'"
         if self.multicastRelayHost:
             result += " multicastRelayHost='" + self.multicastRelayHost + "'"
         if self.multicastRelayPort != 0:
@@ -33540,14 +32592,10 @@ class ReceiverPdu(_X3DNetworkSensorNode, _X3DBoundedObject):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</ReceiverPdu>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -33627,14 +32675,10 @@ class Rectangle2D(_X3DGeometryNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</Rectangle2D>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -34026,18 +33070,12 @@ class RigidBody(_X3DNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.massDensityModel: # walk each child node, if any
-                for each in self.massDensityModel:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.massDensityModel: # output this SFNode
+                result += self.massDensityModel.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
             if self.geometry: # walk each child node, if any
                 for each in self.geometry:
@@ -34313,18 +33351,12 @@ class RigidBodyCollection(_X3DChildNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.collider: # walk each child node, if any
-                for each in self.collider:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.collider: # output this SFNode
+                result += self.collider.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
             if self.bodies: # walk each child node, if any
                 for each in self.bodies:
@@ -34427,14 +33459,10 @@ class ScalarChaser(_X3DChaserNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</ScalarChaser>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -34561,14 +33589,10 @@ class ScalarDamper(_X3DDamperNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</ScalarDamper>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -34647,14 +33671,10 @@ class ScalarInterpolator(_X3DInterpolatorNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</ScalarInterpolator>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -34818,11 +33838,11 @@ class ScreenFontStyle(_X3DFontStyleNode):
         if self.class_:
             result += " class_='" + self.class_ + "'"
         if self.family != ["SERIF"]:
-            result += " family='" + self.family + "'"
+            result += " family='" + str(self.family) + "'"
         if self.horizontal != True:
             result += " horizontal='" + str(self.horizontal) + "'"
         if self.justify != ["BEGIN"]:
-            result += " justify='" + self.justify + "'"
+            result += " justify='" + str(self.justify) + "'"
         if self.language:
             result += " language='" + self.language + "'"
         if self.leftToRight != True:
@@ -34839,14 +33859,10 @@ class ScreenFontStyle(_X3DFontStyleNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</ScreenFontStyle>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -34967,14 +33983,10 @@ class ScreenGroup(_X3DGroupingNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
             if self.children: # walk each child node, if any
                 for each in self.children:
@@ -35083,19 +34095,15 @@ class Script(_X3DScriptNode):
         if self.mustEvaluate != False:
             result += " mustEvaluate='" + str(self.mustEvaluate) + "'"
         if self.url != list():
-            result += " url='" + self.url + "'"
+            result += " url='" + str(self.url) + "'"
         if not self.hasChild():
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
             if self.field: # walk each child node, if any
                 for each in self.field:
@@ -35282,22 +34290,14 @@ class SegmentedVolumeData(_X3DVolumeDataNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.segmentIdentifiers: # walk each child node, if any
-                for each in self.segmentIdentifiers:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.voxels: # walk each child node, if any
-                for each in self.voxels:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
+            if self.segmentIdentifiers: # output this SFNode
+                result += self.segmentIdentifiers.toXML(indentLevel=indentLevel+1)
+            if self.voxels: # output this SFNode
+                result += self.voxels.toXML(indentLevel=indentLevel+1)
             ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
             if self.renderStyle: # walk each child node, if any
                 for each in self.renderStyle:
@@ -35440,22 +34440,14 @@ class ShadedVolumeStyle(_X3DComposableVolumeRenderStyleNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.material: # walk each child node, if any
-                for each in self.material:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.surfaceNormals: # walk each child node, if any
-                for each in self.surfaceNormals:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.material: # output this SFNode
+                result += self.material.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
+            if self.surfaceNormals: # output this SFNode
+                result += self.surfaceNormals.toXML(indentLevel=indentLevel+1)
             result += indent + '</ShadedVolumeStyle>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -35529,19 +34521,15 @@ class ShaderPart(_X3DNode): # , _X3DUrlObject # TODO fix additional inheritance 
         if self.type != 'VERTEX':
             result += " type='" + self.type + "'"
         if self.url != list():
-            result += " url='" + self.url + "'"
+            result += " url='" + str(self.url) + "'"
         if not self.hasChild():
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</ShaderPart>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -35631,19 +34619,15 @@ class ShaderProgram(_X3DNode): # , _X3DUrlObject, _X3DProgrammableShaderObject #
         if self.type != 'VERTEX':
             result += " type='" + self.type + "'"
         if self.url != list():
-            result += " url='" + self.url + "'"
+            result += " url='" + str(self.url) + "'"
         if not self.hasChild():
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
             if self.field: # walk each child node, if any
                 for each in self.field:
@@ -35787,22 +34771,14 @@ class Shape(_X3DShapeNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.appearance: # walk each child node, if any
-                for each in self.appearance:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.geometry: # walk each child node, if any
-                for each in self.geometry:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.appearance: # output this SFNode
+                result += self.appearance.toXML(indentLevel=indentLevel+1)
+            if self.geometry: # output this SFNode
+                result += self.geometry.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</Shape>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -36209,7 +35185,7 @@ class SignalPdu(_X3DNetworkSensorNode, _X3DBoundedObject):
         if self.geoCoords != (0, 0, 0):
             result += " geoCoords='" + str(self.geoCoords) + "'"
         if self.geoSystem != ["GD", "WE"]:
-            result += " geoSystem='" + self.geoSystem + "'"
+            result += " geoSystem='" + str(self.geoSystem) + "'"
         if self.multicastRelayHost:
             result += " multicastRelayHost='" + self.multicastRelayHost + "'"
         if self.multicastRelayPort != 0:
@@ -36242,14 +35218,10 @@ class SignalPdu(_X3DNetworkSensorNode, _X3DBoundedObject):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</SignalPdu>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -36376,18 +35348,12 @@ class SilhouetteEnhancementVolumeStyle(_X3DComposableVolumeRenderStyleNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.surfaceNormals: # walk each child node, if any
-                for each in self.surfaceNormals:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
+            if self.surfaceNormals: # output this SFNode
+                result += self.surfaceNormals.toXML(indentLevel=indentLevel+1)
             result += indent + '</SilhouetteEnhancementVolumeStyle>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -36558,7 +35524,7 @@ class SingleAxisHingeJoint(_X3DRigidJointNode):
         if self.class_:
             result += " class_='" + self.class_ + "'"
         if self.forceOutput != ["NONE"]:
-            result += " forceOutput='" + self.forceOutput + "'"
+            result += " forceOutput='" + str(self.forceOutput) + "'"
         if self.maxAngle != 3.141592653:
             result += " maxAngle='" + str(self.maxAngle) + "'"
         if self.minAngle != -3.141592653:
@@ -36571,22 +35537,14 @@ class SingleAxisHingeJoint(_X3DRigidJointNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.body1: # walk each child node, if any
-                for each in self.body1:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.body2: # walk each child node, if any
-                for each in self.body2:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.body1: # output this SFNode
+                result += self.body1.toXML(indentLevel=indentLevel+1)
+            if self.body2: # output this SFNode
+                result += self.body2.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</SingleAxisHingeJoint>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -36754,7 +35712,7 @@ class SliderJoint(_X3DRigidJointNode):
         if self.class_:
             result += " class_='" + self.class_ + "'"
         if self.forceOutput != ["NONE"]:
-            result += " forceOutput='" + self.forceOutput + "'"
+            result += " forceOutput='" + str(self.forceOutput) + "'"
         if self.maxSeparation != 1:
             result += " maxSeparation='" + str(self.maxSeparation) + "'"
         if self.minSeparation != 0:
@@ -36769,22 +35727,14 @@ class SliderJoint(_X3DRigidJointNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.body1: # walk each child node, if any
-                for each in self.body1:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.body2: # walk each child node, if any
-                for each in self.body2:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.body1: # output this SFNode
+                result += self.body1.toXML(indentLevel=indentLevel+1)
+            if self.body2: # output this SFNode
+                result += self.body2.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</SliderJoint>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -36990,18 +35940,12 @@ class Sound(_X3DSoundNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.source: # walk each child node, if any
-                for each in self.source:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
+            if self.source: # output this SFNode
+                result += self.source.toXML(indentLevel=indentLevel+1)
             result += indent + '</Sound>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -37081,14 +36025,10 @@ class Sphere(_X3DGeometryNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</Sphere>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -37197,14 +36137,10 @@ class SphereSensor(_X3DDragSensorNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</SphereSensor>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -37328,14 +36264,10 @@ class SplinePositionInterpolator(_X3DInterpolatorNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</SplinePositionInterpolator>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -37459,14 +36391,10 @@ class SplinePositionInterpolator2D(_X3DInterpolatorNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</SplinePositionInterpolator2D>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -37590,14 +36518,10 @@ class SplineScalarInterpolator(_X3DInterpolatorNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</SplineScalarInterpolator>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -37819,14 +36743,10 @@ class SpotLight(_X3DLightNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</SpotLight>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -37920,14 +36840,10 @@ class SquadOrientationInterpolator(_X3DInterpolatorNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</SquadOrientationInterpolator>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -38048,14 +36964,10 @@ class StaticGroup(_X3DChildNode, _X3DBoundedObject):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
             if self.children: # walk each child node, if any
                 for each in self.children:
@@ -38138,14 +37050,10 @@ class StringSensor(_X3DKeyDeviceSensorNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</StringSensor>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -38290,18 +37198,12 @@ class SurfaceEmitter(_X3DParticleEmitterNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.surface: # walk each child node, if any
-                for each in self.surface:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
+            if self.surface: # output this SFNode
+                result += self.surface.toXML(indentLevel=indentLevel+1)
             result += indent + '</SurfaceEmitter>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -38438,14 +37340,10 @@ class Switch(_X3DGroupingNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
             if self.children: # walk each child node, if any
                 for each in self.children:
@@ -38544,14 +37442,10 @@ class TexCoordChaser2D(_X3DChaserNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</TexCoordChaser2D>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -38678,14 +37572,10 @@ class TexCoordDamper2D(_X3DDamperNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</TexCoordDamper2D>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -38806,23 +37696,17 @@ class Text(_X3DGeometryNode):
         if self.solid != False:
             result += " solid='" + str(self.solid) + "'"
         if self.string != list():
-            result += " string='" + self.string + "'"
+            result += " string='" + str(self.string) + "'"
         if not self.hasChild():
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.fontStyle: # walk each child node, if any
-                for each in self.fontStyle:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.fontStyle: # output this SFNode
+                result += self.fontStyle.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</Text>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -39049,38 +37933,22 @@ class TextureBackground(_X3DBackgroundNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.backTexture: # walk each child node, if any
-                for each in self.backTexture:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.bottomTexture: # walk each child node, if any
-                for each in self.bottomTexture:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.frontTexture: # walk each child node, if any
-                for each in self.frontTexture:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.leftTexture: # walk each child node, if any
-                for each in self.leftTexture:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.rightTexture: # walk each child node, if any
-                for each in self.rightTexture:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.topTexture: # walk each child node, if any
-                for each in self.topTexture:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.backTexture: # output this SFNode
+                result += self.backTexture.toXML(indentLevel=indentLevel+1)
+            if self.bottomTexture: # output this SFNode
+                result += self.bottomTexture.toXML(indentLevel=indentLevel+1)
+            if self.frontTexture: # output this SFNode
+                result += self.frontTexture.toXML(indentLevel=indentLevel+1)
+            if self.leftTexture: # output this SFNode
+                result += self.leftTexture.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
+            if self.rightTexture: # output this SFNode
+                result += self.rightTexture.toXML(indentLevel=indentLevel+1)
+            if self.topTexture: # output this SFNode
+                result += self.topTexture.toXML(indentLevel=indentLevel+1)
             result += indent + '</TextureBackground>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -39144,14 +38012,10 @@ class TextureCoordinate(_X3DTextureCoordinateNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</TextureCoordinate>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -39215,14 +38079,10 @@ class TextureCoordinate3D(_X3DTextureCoordinateNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</TextureCoordinate3D>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -39286,14 +38146,10 @@ class TextureCoordinate4D(_X3DTextureCoordinateNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</TextureCoordinate4D>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -39372,14 +38228,10 @@ class TextureCoordinateGenerator(_X3DTextureCoordinateNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</TextureCoordinateGenerator>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -39597,14 +38449,10 @@ class TextureProperties(_X3DNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</TextureProperties>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -39713,14 +38561,10 @@ class TextureTransform(_X3DTextureTransformNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</TextureTransform>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -39829,14 +38673,10 @@ class TextureTransform3D(_X3DTextureTransformNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</TextureTransform3D>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -39900,14 +38740,10 @@ class TextureTransformMatrix3D(_X3DTextureTransformNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</TextureTransformMatrix3D>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -40062,14 +38898,10 @@ class TimeSensor(_X3DTimeDependentNode, _X3DSensorNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</TimeSensor>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -40118,14 +38950,10 @@ class TimeTrigger(_X3DTriggerNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</TimeTrigger>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -40236,18 +39064,12 @@ class ToneMappedVolumeStyle(_X3DComposableVolumeRenderStyleNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.surfaceNormals: # walk each child node, if any
-                for each in self.surfaceNormals:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
+            if self.surfaceNormals: # output this SFNode
+                result += self.surfaceNormals.toXML(indentLevel=indentLevel+1)
             result += indent + '</ToneMappedVolumeStyle>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -40326,14 +39148,10 @@ class TouchSensor(_X3DTouchSensorNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</TouchSensor>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -40529,14 +39347,10 @@ class Transform(_X3DGroupingNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
             if self.children: # walk each child node, if any
                 for each in self.children:
@@ -40651,18 +39465,12 @@ class TransformSensor(_X3DEnvironmentalSensorNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.targetObject: # walk each child node, if any
-                for each in self.targetObject:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
+            if self.targetObject: # output this SFNode
+                result += self.targetObject.toXML(indentLevel=indentLevel+1)
             result += indent + '</TransformSensor>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -41283,7 +40091,7 @@ class TransmitterPdu(_X3DNetworkSensorNode, _X3DBoundedObject):
         if self.geoCoords != (0, 0, 0):
             result += " geoCoords='" + str(self.geoCoords) + "'"
         if self.geoSystem != ["GD", "WE"]:
-            result += " geoSystem='" + self.geoSystem + "'"
+            result += " geoSystem='" + str(self.geoSystem) + "'"
         if self.inputSource != 0:
             result += " inputSource='" + str(self.inputSource) + "'"
         if self.lengthOfModulationParameters != 0:
@@ -41342,14 +40150,10 @@ class TransmitterPdu(_X3DNetworkSensorNode, _X3DBoundedObject):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</TransmitterPdu>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -41567,34 +40371,20 @@ class TriangleFanSet(_X3DComposedGeometryNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.color: # walk each child node, if any
-                for each in self.color:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.coord: # walk each child node, if any
-                for each in self.coord:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.fogCoord: # walk each child node, if any
-                for each in self.fogCoord:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.normal: # walk each child node, if any
-                for each in self.normal:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.texCoord: # walk each child node, if any
-                for each in self.texCoord:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.color: # output this SFNode
+                result += self.color.toXML(indentLevel=indentLevel+1)
+            if self.coord: # output this SFNode
+                result += self.coord.toXML(indentLevel=indentLevel+1)
+            if self.fogCoord: # output this SFNode
+                result += self.fogCoord.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
+            if self.normal: # output this SFNode
+                result += self.normal.toXML(indentLevel=indentLevel+1)
+            if self.texCoord: # output this SFNode
+                result += self.texCoord.toXML(indentLevel=indentLevel+1)
             ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
             if self.attrib: # walk each child node, if any
                 for each in self.attrib:
@@ -41800,34 +40590,20 @@ class TriangleSet(_X3DComposedGeometryNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.color: # walk each child node, if any
-                for each in self.color:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.coord: # walk each child node, if any
-                for each in self.coord:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.fogCoord: # walk each child node, if any
-                for each in self.fogCoord:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.normal: # walk each child node, if any
-                for each in self.normal:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.texCoord: # walk each child node, if any
-                for each in self.texCoord:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.color: # output this SFNode
+                result += self.color.toXML(indentLevel=indentLevel+1)
+            if self.coord: # output this SFNode
+                result += self.coord.toXML(indentLevel=indentLevel+1)
+            if self.fogCoord: # output this SFNode
+                result += self.fogCoord.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
+            if self.normal: # output this SFNode
+                result += self.normal.toXML(indentLevel=indentLevel+1)
+            if self.texCoord: # output this SFNode
+                result += self.texCoord.toXML(indentLevel=indentLevel+1)
             ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
             if self.attrib: # walk each child node, if any
                 for each in self.attrib:
@@ -41910,14 +40686,10 @@ class TriangleSet2D(_X3DGeometryNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</TriangleSet2D>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -42135,34 +40907,20 @@ class TriangleStripSet(_X3DComposedGeometryNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.color: # walk each child node, if any
-                for each in self.color:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.coord: # walk each child node, if any
-                for each in self.coord:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.fogCoord: # walk each child node, if any
-                for each in self.fogCoord:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.normal: # walk each child node, if any
-                for each in self.normal:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.texCoord: # walk each child node, if any
-                for each in self.texCoord:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.color: # output this SFNode
+                result += self.color.toXML(indentLevel=indentLevel+1)
+            if self.coord: # output this SFNode
+                result += self.coord.toXML(indentLevel=indentLevel+1)
+            if self.fogCoord: # output this SFNode
+                result += self.fogCoord.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
+            if self.normal: # output this SFNode
+                result += self.normal.toXML(indentLevel=indentLevel+1)
+            if self.texCoord: # output this SFNode
+                result += self.texCoord.toXML(indentLevel=indentLevel+1)
             ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
             if self.attrib: # walk each child node, if any
                 for each in self.attrib:
@@ -42422,14 +41180,10 @@ class TwoSidedMaterial(_X3DMaterialNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</TwoSidedMaterial>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -42619,7 +41373,7 @@ class UniversalJoint(_X3DRigidJointNode):
         if self.class_:
             result += " class_='" + self.class_ + "'"
         if self.forceOutput != ["NONE"]:
-            result += " forceOutput='" + self.forceOutput + "'"
+            result += " forceOutput='" + str(self.forceOutput) + "'"
         if self.stop1Bounce != 0:
             result += " stop1Bounce='" + str(self.stop1Bounce) + "'"
         if self.stop1ErrorCorrection != 0.8:
@@ -42632,22 +41386,14 @@ class UniversalJoint(_X3DRigidJointNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.body1: # walk each child node, if any
-                for each in self.body1:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.body2: # walk each child node, if any
-                for each in self.body2:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.body1: # output this SFNode
+                result += self.body1.toXML(indentLevel=indentLevel+1)
+            if self.body2: # output this SFNode
+                result += self.body2.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</UniversalJoint>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -42803,14 +41549,10 @@ class Viewpoint(_X3DViewpointNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</Viewpoint>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -42947,14 +41689,10 @@ class ViewpointGroup(_X3DChildNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
             if self.children: # walk each child node, if any
                 for each in self.children:
@@ -43095,14 +41833,10 @@ class Viewport(_X3DViewportNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
             if self.children: # walk each child node, if any
                 for each in self.children:
@@ -43201,14 +41935,10 @@ class VisibilitySensor(_X3DEnvironmentalSensorNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</VisibilitySensor>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -43364,22 +42094,14 @@ class VolumeData(_X3DVolumeDataNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.renderStyle: # walk each child node, if any
-                for each in self.renderStyle:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.voxels: # walk each child node, if any
-                for each in self.voxels:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
+            if self.renderStyle: # output this SFNode
+                result += self.renderStyle.toXML(indentLevel=indentLevel+1)
+            if self.voxels: # output this SFNode
+                result += self.voxels.toXML(indentLevel=indentLevel+1)
             result += indent + '</VolumeData>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -43556,18 +42278,12 @@ class VolumeEmitter(_X3DParticleEmitterNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.coord: # walk each child node, if any
-                for each in self.coord:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.coord: # output this SFNode
+                result += self.coord.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</VolumeEmitter>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -43713,25 +42429,19 @@ class VolumePickSensor(_X3DPickSensorNode):
         if self.matchCriterion != 'MATCH_ANY':
             result += " matchCriterion='" + self.matchCriterion + "'"
         if self.objectType != ["ALL"]:
-            result += " objectType='" + self.objectType + "'"
+            result += " objectType='" + str(self.objectType) + "'"
         if self.sortOrder != 'CLOSEST':
             result += " sortOrder='" + self.sortOrder + "'"
         if not self.hasChild():
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.pickingGeometry: # walk each child node, if any
-                for each in self.pickingGeometry:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
+            if self.pickingGeometry: # output this SFNode
+                result += self.pickingGeometry.toXML(indentLevel=indentLevel+1)
             ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
             if self.pickTarget: # walk each child node, if any
                 for each in self.pickTarget:
@@ -43862,14 +42572,10 @@ class WindPhysicsModel(_X3DParticlePhysicsModelNode):
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</WindPhysicsModel>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
@@ -43941,21 +42647,17 @@ class WorldInfo(_X3DInfoNode):
         if self.class_:
             result += " class_='" + self.class_ + "'"
         if self.info != list():
-            result += " info='" + self.info + "'"
+            result += " info='" + str(self.info) + "'"
         if self.title:
             result += " title='" + self.title + "'"
         if not self.hasChild():
             result += '/>' + '\n'
         else:
             result += '>' + '\n'
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.IS: # walk each child node, if any
-                for each in self.IS:
-                    result += each.toXML(indentLevel=indentLevel+1)
-            ## result += indent + '  ' + 'TODO iterate over each child element' + '\n'
-            if self.metadata: # walk each child node, if any
-                for each in self.metadata:
-                    result += each.toXML(indentLevel=indentLevel+1)
+            if self.IS: # output this SFNode
+                result += self.IS.toXML(indentLevel=indentLevel+1)
+            if self.metadata: # output this SFNode
+                result += self.metadata.toXML(indentLevel=indentLevel+1)
             result += indent + '</WorldInfo>' + '\n'
 #       print('XML serialization complete.', flush=True)
         return result
