@@ -43,4 +43,5 @@ var x3d = new X3D({
 	showLog : true
 })
 
+console.log(x3d.toXMLNode());
 export default x3d;

@@ -2,9 +2,10 @@
 <body>
 <script type='text/javascript' src='https://www.x3dom.org/download/dev/x3dom-full.debug.js'></script> 
 <link rel='stylesheet' type='text/css' href='https://www.x3dom.org/download/dev/x3dom.css'></link><script src="modules/app.mjs" type="module"></script>
-<div id="xml"></div>
+<div id="xml">
 <script type="module">
 import x3d from "./modules/app.mjs";
+alert(x3d.toXMLNode());
 document.querySelector("#xml").innerHTML = x3d.toXMLNode();
 </script>
 </body>
