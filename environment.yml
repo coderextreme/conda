@@ -2,7 +2,7 @@ name: example-environment
 channels:
   - conda-forge
 dependencies:
-  - nodejs
+  - nodejs=10.13.0
 # try downgrade to get serving files working
 #  - jupyterlab==0.35.3
 #  - nbconvert==5.4.1
