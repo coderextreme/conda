@@ -28,20 +28,19 @@ var x3d = new X3D({
 					new Shape({
 						appearance : new Appearance({
 							material : new Material({
-								diffuseColor : new SFColor([1, 0, 0])
 							})
 						}),
 						geometry : new Box()
 					})
 				])
-			}),
-			new Transform({
-				translation : new SFVec3f([1, 2, 3]),
-				scale: new SFVec3f([4, 5, 6]),
-				rotation: new SFRotation([7, 8, 9, 3.14])
 			})
 		])
-	})
+	}),
+	"xmlns:xsi":"http://www.w3.org/2001/XMLSchema-instance",
+	"xsi:nonamespaceschemalocation":"http://www.web3d.org/specifications/x3d-3.3.xsd" ,
+	width:"940px",
+	height:"940px",
+	showLog : true
 })
 
-console.log(x3d.toXMLNode());
+export default x3d;
